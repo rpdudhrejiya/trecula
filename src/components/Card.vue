@@ -1,5 +1,7 @@
 <template>
-  <span class="material-icons md-dark">face</span>
+  <div>
+    Hello!!
+  </div>
 </template>
 
 <script>
