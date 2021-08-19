@@ -66,71 +66,13 @@
         <it-button class="verify-button" @click="checkNumber" block>Send me verification code</it-button>
       </div>
     </it-drawer>
-    <it-drawer v-model="isLogin">  
+    <it-drawer v-model="isLogin">
+      <Header/>  
       <div class="main-card">
-        <div class="card">
-          <div class="icon">
-            <svg width="32" height="26" viewBox="0 0 32 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22.6666 25V22.3333C22.6666 20.9188 22.1047 19.5623 21.1045 18.5621C20.1043 17.5619 18.7477 17 17.3333 17H6.66658C5.2521 17 3.89554 17.5619 2.89535 18.5621C1.89516 19.5623 1.33325 20.9188 1.33325 22.3333V25M30.6666 25V22.3333C30.6657 21.1516 30.2724 20.0037 29.5484 19.0698C28.8244 18.1358 27.8108 17.4688 26.6666 17.1733M21.3333 1.17333C22.4805 1.46707 23.4973 2.13427 24.2234 3.06975C24.9496 4.00523 25.3437 5.15577 25.3437 6.34C25.3437 7.52423 24.9496 8.67477 24.2234 9.61025C23.4973 10.5457 22.4805 11.2129 21.3333 11.5067M17.3333 6.33333C17.3333 9.27885 14.9454 11.6667 11.9999 11.6667C9.0544 11.6667 6.66658 9.27885 6.66658 6.33333C6.66658 3.38781 9.0544 1 11.9999 1C14.9454 1 17.3333 3.38781 17.3333 6.33333Z" stroke="#090A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div class="card-right">
-            <div class="cardtitle">
-              Active Members
-            </div>
-            <div class="cardinfo">
-              See live and active team members
-            </div>
-          </div>
-          <div class="card-item">
-          10/16
-          </div>
-        </div>
-        <div class="card">
-          <div class="icon">
-            <svg width="32" height="26" viewBox="0 0 32 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22.6666 25V22.3333C22.6666 20.9188 22.1047 19.5623 21.1045 18.5621C20.1043 17.5619 18.7477 17 17.3333 17H6.66658C5.2521 17 3.89554 17.5619 2.89535 18.5621C1.89516 19.5623 1.33325 20.9188 1.33325 22.3333V25M30.6666 25V22.3333C30.6657 21.1516 30.2724 20.0037 29.5484 19.0698C28.8244 18.1358 27.8108 17.4688 26.6666 17.1733M21.3333 1.17333C22.4805 1.46707 23.4973 2.13427 24.2234 3.06975C24.9496 4.00523 25.3437 5.15577 25.3437 6.34C25.3437 7.52423 24.9496 8.67477 24.2234 9.61025C23.4973 10.5457 22.4805 11.2129 21.3333 11.5067M17.3333 6.33333C17.3333 9.27885 14.9454 11.6667 11.9999 11.6667C9.0544 11.6667 6.66658 9.27885 6.66658 6.33333C6.66658 3.38781 9.0544 1 11.9999 1C14.9454 1 17.3333 3.38781 17.3333 6.33333Z" stroke="#090A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div class="card-right">
-            <div class="cardtitle">
-              Reports
-            </div>
-            <div class="cardinfo">
-              Team activity and tracking reports
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="icon">
-            <svg width="32" height="26" viewBox="0 0 32 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22.6666 25V22.3333C22.6666 20.9188 22.1047 19.5623 21.1045 18.5621C20.1043 17.5619 18.7477 17 17.3333 17H6.66658C5.2521 17 3.89554 17.5619 2.89535 18.5621C1.89516 19.5623 1.33325 20.9188 1.33325 22.3333V25M30.6666 25V22.3333C30.6657 21.1516 30.2724 20.0037 29.5484 19.0698C28.8244 18.1358 27.8108 17.4688 26.6666 17.1733M21.3333 1.17333C22.4805 1.46707 23.4973 2.13427 24.2234 3.06975C24.9496 4.00523 25.3437 5.15577 25.3437 6.34C25.3437 7.52423 24.9496 8.67477 24.2234 9.61025C23.4973 10.5457 22.4805 11.2129 21.3333 11.5067M17.3333 6.33333C17.3333 9.27885 14.9454 11.6667 11.9999 11.6667C9.0544 11.6667 6.66658 9.27885 6.66658 6.33333C6.66658 3.38781 9.0544 1 11.9999 1C14.9454 1 17.3333 3.38781 17.3333 6.33333Z" stroke="#090A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div class="card-right">
-            <div class="cardtitle">
-              Settings
-            </div>
-            <div class="cardinfo">
-              Workspace configurations & Settings
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="icon">
-            <svg width="32" height="26" viewBox="0 0 32 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22.6666 25V22.3333C22.6666 20.9188 22.1047 19.5623 21.1045 18.5621C20.1043 17.5619 18.7477 17 17.3333 17H6.66658C5.2521 17 3.89554 17.5619 2.89535 18.5621C1.89516 19.5623 1.33325 20.9188 1.33325 22.3333V25M30.6666 25V22.3333C30.6657 21.1516 30.2724 20.0037 29.5484 19.0698C28.8244 18.1358 27.8108 17.4688 26.6666 17.1733M21.3333 1.17333C22.4805 1.46707 23.4973 2.13427 24.2234 3.06975C24.9496 4.00523 25.3437 5.15577 25.3437 6.34C25.3437 7.52423 24.9496 8.67477 24.2234 9.61025C23.4973 10.5457 22.4805 11.2129 21.3333 11.5067M17.3333 6.33333C17.3333 9.27885 14.9454 11.6667 11.9999 11.6667C9.0544 11.6667 6.66658 9.27885 6.66658 6.33333C6.66658 3.38781 9.0544 1 11.9999 1C14.9454 1 17.3333 3.38781 17.3333 6.33333Z" stroke="#090A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div class="card-right">
-            <div class="cardtitle">
-              Support
-            </div>
-            <div class="cardinfo">
-              Connect us to get live support
-            </div>
-          </div>
-        </div>
+        <a @click="member = true"><Card isIcon='true' cardtitle = 'Active Members' cardinfo = 'See live and active team members' carditem = '10/16' /></a>
+        <Card isIcon='true' cardtitle = 'Reports' cardinfo = 'Team activity and tracking reports' />
+        <Card isIcon='true' cardtitle = 'Settings' cardinfo = 'Workspace configurations & Settings' />
+        <Card isIcon='true' cardtitle = 'Support' cardinfo = 'Connect us to get live support' />
       </div>
       <div class="power">
         <it-button class="power-button" @click="isLogin = false"> 
@@ -140,10 +82,25 @@
         </it-button>
       </div>
     </it-drawer>
+    <it-drawer v-model="member">
+      <Header/> 
+      <div class="main-card">
+        <Card cardtitle = 'Harsh Malhotra' cardinfo = 'Visited 12 locations and 11 reports' carditem = '20min' />
+        <Card cardtitle = 'Sajid Husain' cardinfo = 'Visited 9 locations and 5 reports' carditem = '12min' />
+        <Card cardtitle = 'Harish Nadiyadwala' cardinfo = 'Visited 23 locations and 20 reports' carditem = '47min' />
+        <Card cardtitle = 'Manohar Yadav' cardinfo = 'Visited 12 locations and 11 reports' carditem = '24min' />
+        <Card cardtitle = 'Lavkush Mishra' cardinfo = 'Visited 23 locations and 17 reports' carditem = '01hrs' />
+        <Card cardtitle = 'Bhupendra Sahi' cardinfo = 'Visited 12 locations and 8 reports' carditem = '32min' />
+        <Card cardtitle = 'Vishal Dahiwala' cardinfo = 'Visited 9 locations and 9 reports' carditem = '20min' />
+        <Card cardtitle = 'Rahul Mishra' cardinfo = 'Visited 12 locations and 11 reports' carditem = '18min' />
+      </div>
+    </it-drawer>
     <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d59528.56014312462!2d72.88647608461409!3d21.170895506680917!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1628855800613!5m2!1sen!2sin" width="1920" height="1099" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
   </div>
 </template>
 <script>
+import Header from './components/Header.vue'
+import Card from './components/Card.vue'
 import {phone} from 'phone';
 import SimpleVueValidation from 'simple-vue-validator';
 const Validator = SimpleVueValidation.Validator;
@@ -163,7 +120,12 @@ export default {
       digit3 : null,
       digit4 : null,      
       sent : false,
+      member : false,
     }
+  },
+  components: {
+    Header,
+    Card,
   },
   validators: {
     email: function (value) {
@@ -196,6 +158,7 @@ export default {
             this.getElement(index+ 1).focus();
           } else {
             this.getElement(index).blur();
+            this.forgot = false;
             this.isLogin = true;
           }
         }
@@ -298,13 +261,12 @@ export default {
       font-weight: normal;
       display: flex;
       flex-direction: row;
-      padding: 25px;
+      padding: 15px;
       .icon {
         float: left;
-        margin: 14px 10px 0px 20px;
-        width: 32px;
-        height: 32px;
-        padding-right: 40px;
+        margin: 10px 10px 0px 20px;
+        width: 29px;
+        height: 24px;
       }
       .card-right {
         float: right;
@@ -315,7 +277,7 @@ export default {
         }
         .cardinfo {
           position: relative;
-          margin-top: -10px;
+          margin-top: -15px;
           font-size: 12px;
           line-height: 32px;
           color: rgba(20, 18, 18, 0.5);
