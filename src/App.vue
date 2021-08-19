@@ -31,7 +31,7 @@
               <div class="message">{{ validation.firstError('password') }}</div>
             </div>
             <div class="form-group">
-              <a href="">Forgot password?</a>
+              <a @click="forgot = true">Forgot password?</a>
             </div>
           </div>
           <div class="action">
@@ -43,7 +43,7 @@
         </form>
       </div>
     </it-drawer>
-    <it-drawer v-model="isLogin">
+    <it-drawer v-model="isLogin">  
       <div class="main-card">
         <div class="card">
           <div class="icon">
@@ -117,6 +117,22 @@
         </it-button>
       </div>
     </it-drawer>
+    <it-drawer v-model="forgot">
+      <div class="number-input">
+        <vue-tel-input v-model="phone" v-on:country-changed="countryChanged" :autoFormat="false"></vue-tel-input>
+      </div>
+      <div class="code">
+        Enter authentication code
+      </div>
+      <div class="code-info">
+        Enter the 4-digit that we have sent via the
+        phone number +{{ country }} {{ phone }}
+        <it-input type="text" id="code" v-model="code" maxlength="1" @keyup="isNumberKey($event)" />
+      </div>
+      <div class="forgot">
+        <it-button class="verify-button" block>Send me verification code</it-button>
+      </div>
+    </it-drawer>
     <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d59528.56014312462!2d72.88647608461409!3d21.170895506680917!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1628855800613!5m2!1sen!2sin" width="1920" height="1099" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
   </div>
 </template>
@@ -128,13 +144,16 @@ export default {
   name: 'App',
   data() {
     return {
-      email: '',
-      password: '',
+      email : '',
+      password : '',
       drawerVisible : true,
       isLogin : false,
+      forgot : true,
+      phone : null,
+      country : null,
+      code : null,
     }
   },
- 
   validators: {
     email: function (value) {
       return Validator.value(value).required().email();
@@ -150,6 +169,17 @@ export default {
         this.isLogin = true;
       }
     },
+    countryChanged(country) {
+      this.country = country.dialCode
+    },
+    isNumberKey(event)
+    {
+      var charCode = (event.which) ? event.which : event.keyCode
+      if (charCode > 31 && (charCode < 48 || charCode > 57))
+        document.getElementById('code').value = ''
+
+      return true;
+    }
   }
 }
 </script>
@@ -258,7 +288,7 @@ export default {
         font-family: Varela Round;
         font-style: normal;
         font-weight: normal;
-        font-size: 16px;
+        font-size: 12px;
         line-height: 32px;
         color: #141212;         
       }
@@ -276,5 +306,57 @@ export default {
       box-shadow: 6px 6px 16px rgba(0, 0, 0, 0.06);
       border-radius: 8px;
     }
+  }
+  .number-input {
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 40px;
+  }
+  .code {
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 32px;
+    text-align: center;
+    color: #090A0A;
+  }
+  .code-info {
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 40px;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: #090A0A;
+  }
+  #code {
+    width: 30px;
+  }
+  .forgot {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 40px;
+    .verify-button {
+      color: #ffffff;
+      font-family: Inter;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 16px;
+      background-image: linear-gradient(95.78deg, #EE0912 -11.11%, #FC5916 88.69%);
+    }
+    @include centering;
   }
 </style>
