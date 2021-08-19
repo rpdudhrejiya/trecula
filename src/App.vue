@@ -43,6 +43,29 @@
         </form>
       </div>
     </it-drawer>
+    <it-drawer v-model="forgot">
+      <div class="number-input">
+        <vue-tel-input v-model="pNumber" v-on:country-changed="countryChanged" :autoFormat="false"></vue-tel-input>
+      </div>
+      <div class="code-sent" v-show="sent">
+        <div class="code">
+          Enter authentication code
+        </div>
+        <div class="code-info">
+          Enter the 4-digit that we have sent via the
+          phone number +{{ country }} {{ pNumber }}
+          <div class="code-input">
+            <input v-model="digit1" id="1" class="c1" type="text" maxlength="1" @keyup="onKeyUpEvent(1, $event)" @focus="onFocusEvent(1)"/>
+            <input v-model="digit2" id="2" class="c1" type="text" maxlength="1" @keyup="onKeyUpEvent(2, $event)" @focus="onFocusEvent(2)"/>
+            <input v-model="digit3" id="3" class="c1" type="text" maxlength="1" @keyup="onKeyUpEvent(3, $event)" @focus="onFocusEvent(3)"/>
+            <input v-model="digit4" id="4" class="c1" type="text" maxlength="1" @keyup="onKeyUpEvent(4, $event)" @focus="onFocusEvent(4)"/>
+          </div>
+        </div>
+      </div>
+      <div class="forgot">
+        <it-button class="verify-button" @click="checkNumber" block>Send me verification code</it-button>
+      </div>
+    </it-drawer>
     <it-drawer v-model="isLogin">  
       <div class="main-card">
         <div class="card">
@@ -117,27 +140,11 @@
         </it-button>
       </div>
     </it-drawer>
-    <it-drawer v-model="forgot">
-      <div class="number-input">
-        <vue-tel-input v-model="phone" v-on:country-changed="countryChanged" :autoFormat="false"></vue-tel-input>
-      </div>
-      <div class="code">
-        Enter authentication code
-      </div>
-      <div class="code-info">
-        Enter the 4-digit that we have sent via the
-        phone number +{{ country }} {{ phone }}
-        <it-input type="text" id="code" v-model="code" maxlength="1" @keyup="isNumberKey($event)" />
-      </div>
-      <div class="forgot">
-        <it-button class="verify-button" block>Send me verification code</it-button>
-      </div>
-    </it-drawer>
     <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d59528.56014312462!2d72.88647608461409!3d21.170895506680917!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1628855800613!5m2!1sen!2sin" width="1920" height="1099" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
   </div>
 </template>
-
 <script>
+import {phone} from 'phone';
 import SimpleVueValidation from 'simple-vue-validator';
 const Validator = SimpleVueValidation.Validator;
 export default {
@@ -148,10 +155,14 @@ export default {
       password : '',
       drawerVisible : true,
       isLogin : false,
-      forgot : true,
-      phone : null,
+      forgot : false,
+      pNumber : null,
       country : null,
-      code : null,
+      digit1 : null,
+      digit2 : null,
+      digit3 : null,
+      digit4 : null,      
+      sent : false,
     }
   },
   validators: {
@@ -172,18 +183,45 @@ export default {
     countryChanged(country) {
       this.country = country.dialCode
     },
-    isNumberKey(event)
-    {
-      var charCode = (event.which) ? event.which : event.keyCode
-      if (charCode > 31 && (charCode < 48 || charCode > 57))
-        document.getElementById('code').value = ''
-
-      return true;
+    getElement(index) {
+      return document.getElementById('' + index);
+    },
+    onKeyUpEvent(index, event) {
+      const eventCode = event.which || event.keyCode;
+      if (this.getElement(index).value.length === 1) {
+        if (eventCode > 31 && (eventCode < 48 || eventCode > 57))
+          this.getElement(index).value='';
+        else {
+          if (index !== 4) {
+            this.getElement(index+ 1).focus();
+          } else {
+            this.getElement(index).blur();
+            this.isLogin = true;
+          }
+        }
+      }
+      if (eventCode === 8 && index !== 1) {
+        this.getElement(index - 1).focus();
+      }
+    },
+    onFocusEvent(index) {
+      for (let item = 1; item < index; item++) {
+        const currentElement = this.getElement(item);
+        if (!currentElement.value) {
+          currentElement.focus();
+          break;
+        }
+      }
+    },
+    checkNumber() {
+      let str = `+${this.country}${this.pNumber}`;
+      const data = phone(str);
+      if(data.isValid) this.sent = true;
+      else this.sent = false;
     }
   }
 }
 </script>
-
 <style lang='scss'>
 @import "@/assets/scss/colors","@/assets/scss/typography","@/assets/scss/mixin";
   .login{
@@ -311,7 +349,7 @@ export default {
     top: 0;
     left: 0;
     right: 0;
-    padding: 40px;
+    padding: 60px;
   }
   .code {
     position: absolute;
@@ -338,9 +376,21 @@ export default {
     line-height: 24px;
     text-align: center;
     color: #090A0A;
-  }
-  #code {
-    width: 30px;
+    .code-input {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 4%;
+      padding: 20px;
+      .c1 {
+        background: #FFFFFF;
+        border: 1px solid #E3E5E6;
+        border-radius: 64px;
+        padding: 20px; 
+        width: 52px;
+        height: 52px;
+      }
+    }
   }
   .forgot {
     position: absolute;
