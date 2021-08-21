@@ -27,7 +27,7 @@
             </div>
             <div class="form-group" :class="{error: validation.hasError('password')}">
               <div class="label">Password</div> 
-              <div class="content"><it-input type="password" v-model="password"/></div>
+              <div class="content"><it-input type="password" v-model="password" /></div>
               <div class="message">{{ validation.firstError('password') }}</div>
             </div>
             <div class="form-group">
@@ -44,6 +44,7 @@
       </div>
     </it-drawer>
     <it-drawer v-model="forgot">
+      <Header @currentDrawer="forgot=false"/>
       <div class="number-input">
         <vue-tel-input v-model="pNumber" v-on:country-changed="countryChanged" :autoFormat="false"></vue-tel-input>
       </div>
@@ -67,9 +68,9 @@
       </div>
     </it-drawer>
     <it-drawer v-model="isLogin">
-      <Header/>  
+      <Header @currentDrawer="isLogin=false"/>  
       <div class="main-card">
-        <a @click="member = true"><Card isIcon='true' cardtitle = 'Active Members' cardinfo = 'See live and active team members' carditem = '10/16' /></a>
+        <a id="anchor-link" @click="member = true"><Card isIcon='true' cardtitle = 'Active Members' cardinfo = 'See live and active team members' carditem = '10/16' /></a>
         <Card isIcon='true' cardtitle = 'Reports' cardinfo = 'Team activity and tracking reports' />
         <Card isIcon='true' cardtitle = 'Settings' cardinfo = 'Workspace configurations & Settings' />
         <Card isIcon='true' cardtitle = 'Support' cardinfo = 'Connect us to get live support' />
@@ -83,7 +84,7 @@
       </div>
     </it-drawer>
     <it-drawer v-model="member">
-      <Header/> 
+      <Header @currentDrawer="member=false"/> 
       <div class="main-card">
         <Card cardtitle = 'Harsh Malhotra' cardinfo = 'Visited 12 locations and 11 reports' carditem = '20min' />
         <Card cardtitle = 'Sajid Husain' cardinfo = 'Visited 9 locations and 5 reports' carditem = '12min' />
@@ -93,6 +94,8 @@
         <Card cardtitle = 'Bhupendra Sahi' cardinfo = 'Visited 12 locations and 8 reports' carditem = '32min' />
         <Card cardtitle = 'Vishal Dahiwala' cardinfo = 'Visited 9 locations and 9 reports' carditem = '20min' />
         <Card cardtitle = 'Rahul Mishra' cardinfo = 'Visited 12 locations and 11 reports' carditem = '18min' />
+        <Card cardtitle = 'Harsh Malhotra' cardinfo = 'Visited 12 locations and 11 reports' carditem = '20min' />
+        <Card cardtitle = 'Sajid Husain' cardinfo = 'Visited 9 locations and 5 reports' carditem = '12min' />
       </div>
     </it-drawer>
     <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d59528.56014312462!2d72.88647608461409!3d21.170895506680917!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1628855800613!5m2!1sen!2sin" width="1920" height="1099" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
@@ -248,8 +251,12 @@ export default {
     font-size: 13px;
     opacity: .5;
   }
+  #anchor-link {
+    text-decoration: none;
+  }
   .main-card {
-    padding: 13px 10px 0px 10px;
+    padding: 35px;
+    margin-top: 30px;
     .card {
       position: relative;
       margin: 26px;
@@ -270,6 +277,7 @@ export default {
       }
       .card-right {
         float: right;
+        padding-left: 10px;
         .cardtitle {
           font-size: 18px;
           line-height: 32px;
@@ -308,10 +316,10 @@ export default {
     }
   }
   .number-input {
+    padding: 100px 40px 0px 40px;
     top: 0;
     left: 0;
     right: 0;
-    padding: 60px;
   }
   .code {
     position: absolute;
