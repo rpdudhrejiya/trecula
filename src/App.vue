@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div id="mapid" ref="mapElement"></div>
     <it-drawer v-model="drawerVisible">
         <div class="login">
         <form @submit.prevent >
@@ -44,7 +45,7 @@
       </div>
     </it-drawer>
     <it-drawer v-model="forgot">
-      <Header @currentDrawer="forgot=false"/>
+      <NavHeader @currentDrawer="forgot=false"/>
       <div class="number-input">
         <vue-tel-input v-model="pNumber" v-on:country-changed="countryChanged" :autoFormat="false"></vue-tel-input>
       </div>
@@ -68,7 +69,7 @@
       </div>
     </it-drawer>
     <it-drawer v-model="isLogin">
-      <Header @currentDrawer="isLogin=false"/>  
+      <NavHeader @currentDrawer="isLogin=false"/>  
       <div class="main-card">
         <a id="anchor-link" @click="member = true"><Card isIcon='true' cardtitle = 'Active Members' cardinfo = 'See live and active team members' carditem = '10/16' /></a>
         <Card isIcon='true' cardtitle = 'Reports' cardinfo = 'Team activity and tracking reports' />
@@ -84,7 +85,7 @@
       </div>
     </it-drawer>
     <it-drawer v-model="member">
-      <Header @currentDrawer="member=false"/> 
+      <NavHeader @currentDrawer="member=false"/> 
       <div class="main-card">
         <Card cardtitle = 'Harsh Malhotra' cardinfo = 'Visited 12 locations and 11 reports' carditem = '20min' />
         <Card cardtitle = 'Sajid Husain' cardinfo = 'Visited 9 locations and 5 reports' carditem = '12min' />
@@ -98,15 +99,16 @@
         <Card cardtitle = 'Sajid Husain' cardinfo = 'Visited 9 locations and 5 reports' carditem = '12min' />
       </div>
     </it-drawer>
-    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d59528.56014312462!2d72.88647608461409!3d21.170895506680917!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1628855800613!5m2!1sen!2sin" width="1920" height="1099" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
   </div>
 </template>
 <script>
-import Header from './components/Header.vue'
+import NavHeader from './components/NavHeader.vue'
 import Card from './components/Card.vue'
 import {phone} from 'phone';
 import SimpleVueValidation from 'simple-vue-validator';
 const Validator = SimpleVueValidation.Validator;
+import L from 'leaflet';
+import data from './user.dummy.data';
 export default {
   name: 'App',
   data() {
@@ -127,7 +129,7 @@ export default {
     }
   },
   components: {
-    Header,
+    NavHeader,
     Card,
   },
   validators: {
@@ -137,6 +139,33 @@ export default {
     password: function (value) {
       return Validator.value(value).required().minLength(6);
     },
+  },
+  async mounted() {
+    var mymap = L.map(this.$refs['mapElement']).setView([51.505, -0.09], 13);
+    await L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox/streets-v11',
+    accessToken: 'pk.eyJ1IjoicnBkdWRoYXJlaml5YSIsImEiOiJja3NsZnRsMzQwMmoxMm9sZWM0NmZmdHlpIn0.zoafh4hNuBnERCr5Y_S66Q'
+    }).addTo(mymap);
+    // create a red polyline from an array of LatLng points
+    var latlngs = [
+      [45.51, -122.68],
+      [37.77, -122.43],
+      [34.04, -118.2]
+    ];
+
+    L.polyline(latlngs, {color: 'red'}).addTo(mymap);
+    var myIcon = L.divIcon({className: 'my-div-icon'});
+    const layerGroup = L.featureGroup().addTo(mymap);
+    data.forEach(({ lat, lon, name, address }) => {
+      layerGroup.addLayer(
+        L.marker([lat, lon], {icon: myIcon}).bindPopup(
+          `Name: ${name}, Address: ${address}`
+        )
+      );
+    });
+    mymap.fitBounds(layerGroup.getBounds());
   },
   methods:{
     submit: async function () {
@@ -190,6 +219,22 @@ export default {
 </script>
 <style lang='scss'>
 @import "@/assets/scss/colors","@/assets/scss/typography","@/assets/scss/mixin";
+#mapid { 
+  height: 968px;
+  z-index: 0;
+}
+.my-div-icon {
+  background:blue;
+  border:5px solid rgba(255,255,255,0.5);
+  color:blue;
+  font-weight:bold;
+  text-align:center;
+  border-radius:50%;
+  line-height:30px;
+  stroke-width:30px;
+  height:30px;
+  width:30px;
+}
   .login{
     .title{
       color: $dark;
