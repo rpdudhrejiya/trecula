@@ -1,5 +1,5 @@
 <template>
-	<it-drawer v-model="showMembers">
+	<it-drawer v-model="showMembers" :closable-mask='false'>
 		<NavHeader/> 
 		<div class="main-card">
 			<Card cardtitle = 'Harsh Malhotra' cardinfo = 'Visited 12 locations and 11 reports' carditem = '20min' />

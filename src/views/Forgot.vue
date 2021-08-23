@@ -1,5 +1,5 @@
 <template>
-	<it-drawer v-model="forgot">
+	<it-drawer v-model="forgot" :closable-mask='false'>
 		<NavHeader/>
 		<div class="number-input">
 			<vue-tel-input v-model="pNumber" v-on:country-changed="countryChanged" :autoFormat="false"></vue-tel-input>

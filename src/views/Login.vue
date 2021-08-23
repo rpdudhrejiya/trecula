@@ -1,5 +1,5 @@
 <template>
-	<it-drawer v-model="isAuthorised">
+	<it-drawer v-model="isAuthorized" :closable-mask='false'>
 		<div class="login">
 			<form @submit.prevent >
 				<div class="layout-form">
@@ -53,7 +53,7 @@ export default {
 		return {
 			email : '',
       password : '',
-			isAuthorised: true,
+			isAuthorized: true,
 		}
 	},
 	validators: {
@@ -68,7 +68,7 @@ export default {
 		submit: async function () {
       const success = await this.$validate();
       if (success) {
-        this.isLogin = true;
+        this.$router.push('/dashboard');
       }
     },
 	}

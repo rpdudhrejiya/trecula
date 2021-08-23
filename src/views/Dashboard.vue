@@ -1,5 +1,5 @@
 <template>
-	<it-drawer v-model="isLogin">
+	<it-drawer v-model="isLogin" :closable-mask='false'>
 		<NavHeader/>  
 		<div class="main-card">
 			<router-link to="/dashboard/active-members" id="anchor-link"><Card isIcon='true' cardtitle = 'Active Members' cardinfo = 'See live and active team members' carditem = '10/16' /></router-link>
