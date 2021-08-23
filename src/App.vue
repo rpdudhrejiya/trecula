@@ -1,145 +1,15 @@
 <template>
-  <div>
-    <div id="mapid" ref="mapElement"></div>
-    <it-drawer v-model="drawerVisible">
-        <div class="login">
-        <form @submit.prevent >
-          <div class="layout-form">
-            <div class="head-login">
-              <div class="icon-title">
-                <svg width="35" height="26" viewBox="0 0 35 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M15.744 3.36796C16.1012 2.86796 17.0635 2.7628 17.5 2.77272C17.9365 2.76281 18.8988 2.86797 19.256 3.36797C19.4048 2.9513 19.881 2.92154 20.0595 3.01083C20.0709 3.01652 20.0827 3.02222 20.0947 3.02804C20.2709 3.11345 20.5022 3.22548 20.4464 3.75488C20.375 3.99297 20.2579 4.21122 20.2083 4.29059C20.2976 4.37987 20.4821 4.62392 20.506 4.88583C20.5738 4.83786 20.6431 4.78867 20.7141 4.73837C23.1954 2.97869 27.5927 -0.139801 35 0.00487595C25.559 2.6474 21.6249 7.69438 19.1127 14.958C19.0962 17.3158 19.3436 19.6537 19.8565 22.356C20.1408 23.8537 19.0197 25.2727 17.4953 25.2727C15.9739 25.2727 14.8534 23.8589 15.1319 22.3632C15.6427 19.62 15.8806 17.2531 15.8534 14.8602C13.3396 7.64905 9.39861 2.63551 0 0.00486239C7.40732 -0.139814 11.8046 2.97868 14.2859 4.73836L14.494 4.88581C14.5179 4.62391 14.7024 4.37986 14.7917 4.29058C14.7421 4.21121 14.625 3.99296 14.5536 3.75486C14.4978 3.22546 14.7291 3.11343 14.9053 3.02803C14.9173 3.02221 14.9291 3.01651 14.9405 3.01081C15.119 2.92153 15.5952 2.95129 15.744 3.36796ZM5.26786 8.99297C5.24405 5.82631 2.44048 2.33623 1.04167 0.987023C9.07739 3.39774 13.5417 9.17155 15.2679 15.3323C12.3214 10.987 9.8512 9.35012 5.26786 8.99297ZM34.0179 0.987023C32.619 2.33623 29.8155 5.82631 29.7917 8.99297C25.2083 9.35012 22.7381 10.987 19.7917 15.3323C21.5179 9.17155 25.9821 3.39774 34.0179 0.987023Z" fill="url(#paint0_linear)"/>
-                <defs>
-                <linearGradient id="paint0_linear" x1="6.60714" y1="-19.3701" x2="33.7202" y2="41.4334" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#EE0979"/>
-                <stop offset="1" stop-color="#FD5D11"/>
-                </linearGradient>
-                </defs>
-                </svg>
-              </div>
-              <div class="title">
-                TRACULA
-              </div>
-            </div>
-            <div class="form-group" :class="{error: validation.hasError('email')}">
-              <div class="label">Email</div>
-              <div class="content"><it-input v-model="email"/></div>
-              <div class="message">{{ validation.firstError('email') }}</div>
-            </div>
-            <div class="form-group" :class="{error: validation.hasError('password')}">
-              <div class="label">Password</div> 
-              <div class="content"><it-input type="password" v-model="password" /></div>
-              <div class="message">{{ validation.firstError('password') }}</div>
-            </div>
-            <div class="form-group">
-              <a @click="forgot = true">Forgot password?</a>
-            </div>
-          </div>
-          <div class="action">
-              <it-button @click="submit" block>Log in</it-button>
-              <div class="p-4">
-                <small>By continuing, you are agree to our <a href="">Terms of Service</a> and <a href="">Privacy Policy</a>.</small>
-              </div>
-          </div>
-        </form>
-      </div>
-    </it-drawer>
-    <it-drawer v-model="forgot">
-      <NavHeader @currentDrawer="forgot=false"/>
-      <div class="number-input">
-        <vue-tel-input v-model="pNumber" v-on:country-changed="countryChanged" :autoFormat="false"></vue-tel-input>
-      </div>
-      <div class="code-sent" v-show="sent">
-        <div class="code">
-          Enter authentication code
-        </div>
-        <div class="code-info">
-          Enter the 4-digit that we have sent via the
-          phone number +{{ country }} {{ pNumber }}
-          <div class="code-input">
-            <input v-model="digit1" id="1" class="c1" type="text" maxlength="1" @keyup="onKeyUpEvent(1, $event)" @focus="onFocusEvent(1)"/>
-            <input v-model="digit2" id="2" class="c1" type="text" maxlength="1" @keyup="onKeyUpEvent(2, $event)" @focus="onFocusEvent(2)"/>
-            <input v-model="digit3" id="3" class="c1" type="text" maxlength="1" @keyup="onKeyUpEvent(3, $event)" @focus="onFocusEvent(3)"/>
-            <input v-model="digit4" id="4" class="c1" type="text" maxlength="1" @keyup="onKeyUpEvent(4, $event)" @focus="onFocusEvent(4)"/>
-          </div>
-        </div>
-      </div>
-      <div class="forgot">
-        <it-button class="verify-button" @click="checkNumber" block>Send me verification code</it-button>
-      </div>
-    </it-drawer>
-    <it-drawer v-model="isLogin">
-      <NavHeader @currentDrawer="isLogin=false"/>  
-      <div class="main-card">
-        <a id="anchor-link" @click="member = true"><Card isIcon='true' cardtitle = 'Active Members' cardinfo = 'See live and active team members' carditem = '10/16' /></a>
-        <Card isIcon='true' cardtitle = 'Reports' cardinfo = 'Team activity and tracking reports' />
-        <Card isIcon='true' cardtitle = 'Settings' cardinfo = 'Workspace configurations & Settings' />
-        <Card isIcon='true' cardtitle = 'Support' cardinfo = 'Connect us to get live support' />
-      </div>
-      <div class="power">
-        <it-button class="power-button" @click="isLogin = false"> 
-          <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M14.3 5.53329C15.3487 6.58228 16.0627 7.91866 16.3519 9.37345C16.6411 10.8282 16.4924 12.3361 15.9247 13.7064C15.357 15.0767 14.3957 16.2479 13.1624 17.0719C11.9291 17.8959 10.4791 18.3357 8.99585 18.3357C7.5126 18.3357 6.06265 17.8959 4.82933 17.0719C3.59602 16.2479 2.63472 15.0767 2.06699 13.7064C1.49926 12.3361 1.35059 10.8282 1.63978 9.37345C1.92897 7.91866 2.64304 6.58228 3.69169 5.53329M9.00002 1.66663V9.99996" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </it-button>
-      </div>
-    </it-drawer>
-    <it-drawer v-model="member">
-      <NavHeader @currentDrawer="member=false"/> 
-      <div class="main-card">
-        <Card cardtitle = 'Harsh Malhotra' cardinfo = 'Visited 12 locations and 11 reports' carditem = '20min' />
-        <Card cardtitle = 'Sajid Husain' cardinfo = 'Visited 9 locations and 5 reports' carditem = '12min' />
-        <Card cardtitle = 'Harish Nadiyadwala' cardinfo = 'Visited 23 locations and 20 reports' carditem = '47min' />
-        <Card cardtitle = 'Manohar Yadav' cardinfo = 'Visited 12 locations and 11 reports' carditem = '24min' />
-        <Card cardtitle = 'Lavkush Mishra' cardinfo = 'Visited 23 locations and 17 reports' carditem = '01hrs' />
-        <Card cardtitle = 'Bhupendra Sahi' cardinfo = 'Visited 12 locations and 8 reports' carditem = '32min' />
-        <Card cardtitle = 'Vishal Dahiwala' cardinfo = 'Visited 9 locations and 9 reports' carditem = '20min' />
-        <Card cardtitle = 'Rahul Mishra' cardinfo = 'Visited 12 locations and 11 reports' carditem = '18min' />
-        <Card cardtitle = 'Harsh Malhotra' cardinfo = 'Visited 12 locations and 11 reports' carditem = '20min' />
-        <Card cardtitle = 'Sajid Husain' cardinfo = 'Visited 9 locations and 5 reports' carditem = '12min' />
-      </div>
-    </it-drawer>
+  <div id="main">
+    <div id="mapid" ref="mapElement">
+      <router-view/>
+    </div>
   </div>
 </template>
 <script>
-import NavHeader from './components/NavHeader.vue'
-import Card from './components/Card.vue'
-import {phone} from 'phone';
-import SimpleVueValidation from 'simple-vue-validator';
-const Validator = SimpleVueValidation.Validator;
 import L from 'leaflet';
 import data from './user.dummy.data';
 export default {
   name: 'App',
-  data() {
-    return {
-      email : '',
-      password : '',
-      drawerVisible : true,
-      isLogin : false,
-      forgot : false,
-      pNumber : null,
-      country : null,
-      digit1 : null,
-      digit2 : null,
-      digit3 : null,
-      digit4 : null,      
-      sent : false,
-      member : false,
-    }
-  },
-  components: {
-    NavHeader,
-    Card,
-  },
-  validators: {
-    email: function (value) {
-      return Validator.value(value).required().email();
-    },
-    password: function (value) {
-      return Validator.value(value).required().minLength(6);
-    },
-  },
   async mounted() {
     var mymap = L.map(this.$refs['mapElement']).setView([51.505, -0.09], 13);
     await L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -148,13 +18,11 @@ export default {
     id: 'mapbox/streets-v11',
     accessToken: 'pk.eyJ1IjoicnBkdWRoYXJlaml5YSIsImEiOiJja3NsZnRsMzQwMmoxMm9sZWM0NmZmdHlpIn0.zoafh4hNuBnERCr5Y_S66Q'
     }).addTo(mymap);
-    // create a red polyline from an array of LatLng points
     var latlngs = [
       [45.51, -122.68],
       [37.77, -122.43],
       [34.04, -118.2]
     ];
-
     L.polyline(latlngs, {color: 'red'}).addTo(mymap);
     var myIcon = L.divIcon({className: 'my-div-icon'});
     const layerGroup = L.featureGroup().addTo(mymap);
@@ -167,54 +35,6 @@ export default {
     });
     mymap.fitBounds(layerGroup.getBounds());
   },
-  methods:{
-    submit: async function () {
-      const success = await this.$validate();
-      if (success) {
-        this.isLogin = true;
-      }
-    },
-    countryChanged(country) {
-      this.country = country.dialCode
-    },
-    getElement(index) {
-      return document.getElementById('' + index);
-    },
-    onKeyUpEvent(index, event) {
-      const eventCode = event.which || event.keyCode;
-      if (this.getElement(index).value.length === 1) {
-        if (eventCode > 31 && (eventCode < 48 || eventCode > 57))
-          this.getElement(index).value='';
-        else {
-          if (index !== 4) {
-            this.getElement(index+ 1).focus();
-          } else {
-            this.getElement(index).blur();
-            this.forgot = false;
-            this.isLogin = true;
-          }
-        }
-      }
-      if (eventCode === 8 && index !== 1) {
-        this.getElement(index - 1).focus();
-      }
-    },
-    onFocusEvent(index) {
-      for (let item = 1; item < index; item++) {
-        const currentElement = this.getElement(item);
-        if (!currentElement.value) {
-          currentElement.focus();
-          break;
-        }
-      }
-    },
-    checkNumber() {
-      let str = `+${this.country}${this.pNumber}`;
-      const data = phone(str);
-      if(data.isValid) this.sent = true;
-      else this.sent = false;
-    }
-  }
 }
 </script>
 <style lang='scss'>

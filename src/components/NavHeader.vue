@@ -1,6 +1,6 @@
 <template>
 	<div class = "nav">
-		<a @click = "currentDrawer">
+		<a @click = "$router.back()">
 			<it-icon class="back-icon" name = "arrow_back" color="#F01513" ></it-icon>
 		</a>
 	</div>
@@ -8,12 +8,7 @@
 
 <script>
 export default {
-	name:'navheader',
-	methods: {
-		currentDrawer() {
-			this.$emit("currentDrawer");
-		}
-	}
+	name:'NavHeader',
 }
 </script>
 
