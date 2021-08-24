@@ -6,23 +6,21 @@ import Active_Members from '../views/Active_Members'
 import Reports from '../views/Reports'
 import Settings from '../views/Settings'
 import Support from '../views/Support'
-//let isAuthenticated = false;
+import store from '../store'
 const routes = [
 	{
 		path: '/dashboard',
 		name: 'Dashboard',
 		component: Dashboard,
-		// beforeEnter: (to, from, next) => {
-		// 	if(!isAuthenticated)
-		// 		next({ name:'Login' })
-		// 	else
-		// 		next()
-		// }
+		// beforeEnter: ((to, from, next) => {
+		// 	if(!store.getters.isAuthenticated) next({ name: 'Login' })
+		// 	else next()
+		// }),
 	},
 	{
 		path: '/login',
 		name: 'Login',
-		component: Login
+		component: Login,
 	},
 	{
 		path: '/forgot',
@@ -50,6 +48,15 @@ const routes = [
 		component: Support
 	}
 ]
-
 const router = createRouter({ history: createWebHistory(), routes })
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/login'];
+  const authRequired = !publicPages.includes(to.path);
+  if (authRequired && !store.getters.isAuthenticated) {
+    return next('/login');
+  }
+	else {
+		next();
+	}
+})
 export default router

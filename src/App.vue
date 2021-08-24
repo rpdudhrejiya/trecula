@@ -124,7 +124,7 @@ export default {
     margin-top: 30px;
     .card {
       position: relative;
-      margin: 26px;
+      margin-top: 26px;
       background: #FFFFFF;
       box-shadow: 6px 6px 18px rgba(0, 0, 0, 0.06);
       border-radius: 8px;

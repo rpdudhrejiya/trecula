@@ -8,10 +8,10 @@ import VueTelInput from 'vue-tel-input';
 import 'vue-tel-input/dist/vue-tel-input.css';
 import L from 'leaflet';
 import router from './router'
-import Vuex from 'vuex'
+import store from './store'
 const app = createApp(App)
 app.use(router)
-app.use(Vuex)
+app.use(store)
 app.use(Equal)
 app.use(SimpleVueValidation);
 app.use(VueTelInput);

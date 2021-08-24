@@ -47,6 +47,7 @@
 <script>
 import SimpleVueValidation from 'simple-vue-validator';
 const Validator = SimpleVueValidation.Validator;
+import { mapActions } from 'vuex'
 export default {
 	name:'Login',
 	data() {	
@@ -65,10 +66,21 @@ export default {
     },
   },
 	methods: {
+		...mapActions(["LogIn"]),
 		submit: async function () {
       const success = await this.$validate();
       if (success) {
-        this.$router.push('/dashboard');
+				const User = {
+					'email': this.email,
+					'password': this.password
+				}
+				try {
+					await this.LogIn(User);
+					this.$router.push('/dashboard');
+				}
+				catch(error) {
+					console.log(error);
+				}
       }
     },
 	}
