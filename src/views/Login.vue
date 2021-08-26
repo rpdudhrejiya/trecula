@@ -26,7 +26,7 @@
 					</div>
 					<div class="form-group" :class="{error: validation.hasError('password')}">
 						<div class="label">Password</div> 
-						<div class="content"><it-input type="password" v-model="password" /></div>
+						<div class="content"><it-input type="password" v-model="password" ref="pass"/></div>
 						<div class="message">{{ validation.firstError('password') }}</div>
 					</div>
 					<div class="form-group">
@@ -86,11 +86,16 @@ export default {
 						data: JSON.stringify(User)
 					})
 					.then((response) => {
-						const Token = response.data.accessToken;
-						this.LogIn({ User, Token});
-						setTimeout(() => {
-							this.LogOut();
-						}, 120000); 
+						if(!response.data) {
+							alert("Incorrect password");
+						}
+						else {
+							const Token = response.data.accessToken;
+							this.LogIn({ User, Token});
+							setTimeout(() => {
+								this.LogOut();
+							}, 120000); //logout after few seconds
+						}
 					}, (error) => {
 						console.log(error);
 					});

@@ -4,7 +4,14 @@ const cors = require('cors');
 var jwt = require('jsonwebtoken');
 const app = express();
 const port = process.env.VUE_APP_PORT || 8000;
-
+const mysql = require('mysql')
+const pool  = mysql.createPool({
+	connectionLimit : 10,
+	host            : '127.0.0.1',
+	user            : 'root',
+	password        : '',
+	database        : 'trecula_db'
+})
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
@@ -14,14 +21,29 @@ app.get('/', (req, res) => {
 });
 app.post('/login',(req, res) => {
 	const { email, password } = req.body;
-	console.log({email, password});
-	const user = {
-		email,password
-	}
-	const payload = {
-		"sub": "1234567890",
-	}
-	const accessToken = jwt.sign(payload, 'thisissecret', { expiresIn: "120s" });
-	res.json({user, accessToken});
+	pool.getConnection((err, connection) => {
+		if(err) throw err
+		connection.query('SELECT * FROM user WHERE email = ?', [email], (err, rows) => {
+			connection.release()
+			if (!err) {
+				if(rows[0].password === password) {
+					const user = {
+						email: rows[0].email,
+						password: rows[0].password
+					}
+					const payload = {
+						"sub": rows[0].id,
+					}
+					const accessToken = jwt.sign(payload, 'thisissecret', { expiresIn: "120s" });
+					res.json({user, accessToken});
+				}
+				else {
+					res.json();
+				}
+			} else {
+				console.log(err)
+			}
+		})
+	})
 })
 app.listen(port);
