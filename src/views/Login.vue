@@ -1,5 +1,5 @@
 <template>
-	<it-drawer v-model="isAuthorized" :closable-mask='false'>
+	<it-drawer v-model="isAuthorized" >
 		<div class="login">
 			<form @submit.prevent >
 				<div class="layout-form">
@@ -34,10 +34,10 @@
 					</div>
 				</div>
 				<div class="action">
-						<it-button @click="submit" block>Log in</it-button>
-						<div class="p-4">
-							<small>By continuing, you are agree to our <a href="">Terms of Service</a> and <a href="">Privacy Policy</a>.</small>
-						</div>
+					<it-button @click="submit" block>Log in</it-button>
+					<div class="p-4">
+						<small>By continuing, you are agree to our <a href="">Terms of Service</a> and <a href="">Privacy Policy</a>.</small>
+					</div>
 				</div>
 			</form>
 		</div>
@@ -48,12 +48,14 @@
 import SimpleVueValidation from 'simple-vue-validator';
 const Validator = SimpleVueValidation.Validator;
 import { mapActions } from 'vuex'
+// import { inject } from '@vue/runtime-core';
+// inject('$axios')
 export default {
 	name:'Login',
 	data() {	
 		return {
-			email : '',
-      password : '',
+			email : 'test@gmail.com',
+      password : '1234567890',
 			isAuthorized: true,
 		}
 	},
@@ -66,7 +68,7 @@ export default {
     },
   },
 	methods: {
-		...mapActions(["LogIn"]),
+		...mapActions(["LogIn","LogOut"]),
 		submit: async function () {
       const success = await this.$validate();
       if (success) {
@@ -75,8 +77,23 @@ export default {
 					'password': this.password
 				}
 				try {
-					await this.LogIn(User);
-					this.$router.push('/dashboard');
+					await this.axios({
+						method: 'post',
+						url: '/login',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						data: JSON.stringify(User)
+					})
+					.then((response) => {
+						const Token = response.data.accessToken;
+						this.LogIn({ User, Token});
+						setTimeout(() => {
+							this.LogOut();
+						}, 120000); 
+					}, (error) => {
+						console.log(error);
+					});
 				}
 				catch(error) {
 					console.log(error);
@@ -87,6 +104,6 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang='scss'>
+@import '@/assets/scss/login';
 </style>

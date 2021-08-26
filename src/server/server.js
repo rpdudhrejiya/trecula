@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 var jwt = require('jsonwebtoken');
 const app = express();
-const port = 8000;
+const port = process.env.VUE_APP_PORT || 8000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,8 +15,13 @@ app.get('/', (req, res) => {
 app.post('/login',(req, res) => {
 	const { email, password } = req.body;
 	console.log({email, password});
-	const accessToken = jwt.sign({email}, 'thisissecret', { expiresIn: 60000 });
-	res.json(accessToken);
+	const user = {
+		email,password
+	}
+	const payload = {
+		"sub": "1234567890",
+	}
+	const accessToken = jwt.sign(payload, 'thisissecret', { expiresIn: "120s" });
+	res.json({user, accessToken});
 })
-// listen on the port
 app.listen(port);

@@ -1,0 +1,48 @@
+.main-card {
+	padding: 35px;
+	margin-top: 30px;
+	.card {
+		position: relative;
+		margin-top: 26px;
+		background: #FFFFFF;
+		box-shadow: 6px 6px 18px rgba(0, 0, 0, 0.06);
+		border-radius: 8px;
+		font-family: Varela Round;
+		font-style: normal;
+		font-weight: normal;
+		display: flex;
+		flex-direction: row;
+		padding: 15px;
+		.icon {
+			float: left;
+			margin: 10px 10px 0px 20px;
+			width: 29px;
+			height: 24px;
+		}
+		.card-right {
+			float: right;
+			padding-left: 10px;
+			.cardtitle {
+				font-size: 18px;
+				line-height: 32px;
+				color: #141212;
+			}
+			.cardinfo {
+				position: relative;
+				margin-top: -15px;
+				font-size: 12px;
+				line-height: 32px;
+				color: rgba(20, 18, 18, 0.5);
+			}
+		}
+		.card-item {
+			margin: auto;
+			font-family: Varela Round;
+			font-style: normal;
+			font-weight: normal;
+			font-size: 12px;
+			line-height: 32px;
+			color: #141212;         
+		}
+	}
+}

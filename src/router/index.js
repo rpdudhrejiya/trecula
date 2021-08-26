@@ -12,10 +12,6 @@ const routes = [
 		path: '/dashboard',
 		name: 'Dashboard',
 		component: Dashboard,
-		// beforeEnter: ((to, from, next) => {
-		// 	if(!store.getters.isAuthenticated) next({ name: 'Login' })
-		// 	else next()
-		// }),
 	},
 	{
 		path: '/login',
@@ -50,7 +46,7 @@ const routes = [
 ]
 const router = createRouter({ history: createWebHistory(), routes })
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login'];
+  const publicPages = ['/login','/forgot'];
   const authRequired = !publicPages.includes(to.path);
   if (authRequired && !store.getters.isAuthenticated) {
     return next('/login');

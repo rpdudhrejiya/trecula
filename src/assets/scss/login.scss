@@ -1,0 +1,61 @@
+@import '@/assets/scss/mixin','@/assets/scss/colors',"@/assets/scss/typography";
+.login{
+	position: relative;
+	height: 100%;
+	@include centering;
+}
+.title{
+	color: $dark;
+	font-family: $Font-Title;
+	font-weight: $Weight;
+	font-style: $Style;
+	font-size: $Size;
+	line-height: $Line-height;
+	@include centering;
+}
+.action{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 40px;
+	a {
+		color:#F01513;
+	}
+	button {
+		color: #ffffff;
+		font-family: Inter;
+		font-style: normal;
+		font-weight: 500;
+		font-size: 16px;
+		line-height: 16px;
+		background-image: linear-gradient(95.78deg, #EE0912 -11.11%, #FC5916 88.69%);
+	}
+}
+.form-group{
+	a {
+		color:#F01513;
+	}
+	padding: 10px;
+}
+.icon-title {
+	margin-top: 9px;
+}
+.p-4 {
+	font-size: 12px;
+}
+.layout-form .message {
+	position: absolute;
+}
+.head-login {
+	padding-top: 40px;
+	@include centering;
+}
+.label {
+	color: #72777A
+}
+.message {
+	color: #ff0000;
+	font-size: 13px;
+	opacity: .5;
+}

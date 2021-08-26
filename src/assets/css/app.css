@@ -1,0 +1,24 @@
+#mapid { 
+  position:absolute;
+  top:0px;
+  right:0px;
+  bottom:0px;
+  left:0px;
+  height: 100vh;
+  z-index: 0;
+}
+#anchor-link {
+	text-decoration: none;
+}
+.my-div-icon {
+  background:blue;
+  border:5px solid rgba(255,255,255,0.5);
+  color:blue;
+  font-weight:bold;
+  text-align:center;
+  border-radius:50%;
+  line-height:30px;
+  stroke-width:30px;
+  height:30px;
+  width:30px;
+}

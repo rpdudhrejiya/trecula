@@ -1,0 +1,13 @@
+.power {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	padding: 40px;
+	.power-button {
+		width: 45px;
+		height: 45px;
+		background: #F9462D;
+		box-shadow: 6px 6px 16px rgba(0, 0, 0, 0.06);
+		border-radius: 8px;
+	}
+}
