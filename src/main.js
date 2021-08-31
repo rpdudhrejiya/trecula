@@ -9,13 +9,12 @@ import L from 'leaflet';
 import router from './router'
 import store from './store'
 import axios from 'axios';
+import GAuth from 'vue3-google-oauth2'
 const app = createApp(App)
 axios.defaults.baseURL=process.env.VUE_APP_SERVER_URL
 app.config.globalProperties.axios=axios
-// const client = new axios({
-// 	baseURL: process.env.BASEURL
-// });
-// app.provide('$axios', client);
+const gAuthOptions = { clientId: '1060817319289-n62b7acskj5unocts5nu3rhd5i1ba7qk.apps.googleusercontent.com', scope: 'email', prompt: 'consent', fetch_basic_profile: false }
+app.use(GAuth, gAuthOptions)
 app.use(router)
 app.use(store)
 app.use(Equal)

@@ -33,6 +33,12 @@
 						<router-link to="/forgot">Forgot password?</router-link>
 					</div>
 				</div>
+				<div>
+					<it-button @click="handleClickSignIn">Sign in with Google</it-button>
+					<!-- <button @click="handleClickGetAuthCode" :disabled="!Vue3GoogleOauth.isInit">get authCode</button>
+					<button @click="handleClickSignOut" :disabled="!Vue3GoogleOauth.isAuthorized">sign out</button>
+					<button @click="handleClickDisconnect" :disabled="!Vue3GoogleOauth.isAuthorized">disconnect</button> -->
+				</div>
 				<div class="action">
 					<it-button @click="submit" block>Log in</it-button>
 					<div class="p-4">
@@ -48,14 +54,16 @@
 import SimpleVueValidation from 'simple-vue-validator';
 const Validator = SimpleVueValidation.Validator;
 import { mapActions } from 'vuex'
-// import { inject } from '@vue/runtime-core';
-// inject('$axios')
+import { inject, toRefs } from "vue";
 export default {
 	name:'Login',
+	props: {
+    msg: String,
+  },
 	data() {	
 		return {
-			email : 'test@gmail.com',
-      password : '1234567890',
+			email : '',
+      password : '',
 			isAuthorized: true,
 		}
 	},
@@ -76,36 +84,96 @@ export default {
 					'email': this.email,
 					'password': this.password
 				}
-				try {
-					await this.axios({
-						method: 'post',
-						url: '/login',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-						data: JSON.stringify(User)
-					})
-					.then((response) => {
-						if(!response.data) {
-							alert("Incorrect password");
-						}
-						else {
-							const Token = response.data.accessToken;
-							this.LogIn({ User, Token});
-							setTimeout(() => {
-								this.LogOut();
-							}, 120000); //logout after few seconds
-						}
-					}, (error) => {
-						console.log(error);
-					});
-				}
-				catch(error) {
+				await this.axios({
+					method: 'post',
+					url: '/login',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					data: JSON.stringify(User)
+				})
+				.then((response) => {
+					if(!response.data) {
+						alert("Incorrect email or password");
+					}
+					else {
+						const Token = response.data.accessToken;
+						this.LogIn({ User, Token});
+					}
+				}, (error) => {
 					console.log(error);
-				}
+				});
       }
     },
-	}
+		async handleClickSignIn(){
+      try {
+        const googleUser = await this.$gAuth.signIn();
+        if (!googleUser) {
+          return null;
+        }
+        this.email = googleUser.getBasicProfile().getEmail();
+        // console.log("googleUser", googleUser);
+        // console.log("getId", this.user);
+        // console.log("getBasicProfile", googleUser.getBasicProfile());
+        // console.log("getAuthResponse", googleUser.getAuthResponse());
+				const User = {
+					email : this.email,
+					password : ''
+				}
+				await this.axios({
+					method: 'post',
+					url: '/login-with-google',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					data: JSON.stringify(User)
+				})
+				.then(() => {
+						const Token = googleUser.getAuthResponse().access_token;
+						console.log(Token);
+						this.LogIn({ User, Token});
+				}, (error) => {
+					console.log(error);
+				});
+      } catch (error) {
+        //on fail do something
+        console.error(error);
+        return null;
+      }
+    },
+    // async handleClickGetAuthCode(){
+    //   try {
+    //     const authCode = await this.$gAuth.getAuthCode();
+    //     console.log("authCode", authCode);
+    //   } catch(error) {
+    //     //on fail do something
+    //     console.error(error);
+    //     return null;
+    //   }
+    // },
+    // async handleClickSignOut() {
+    //   try {
+    //     await this.$gAuth.signOut();
+    //     console.log("isAuthorized", this.Vue3GoogleOauth.isAuthorized);
+    //     this.user = "";
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // },
+    // handleClickDisconnect() {
+    //   window.location.href = `https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=${window.location.href}`;
+    // },
+	},
+	setup(props) {
+    const { isSignIn } = toRefs(props);
+    const Vue3GoogleOauth = inject("Vue3GoogleOauth");
+    const handleClickLogin = () => {};
+    return {
+      Vue3GoogleOauth,
+      handleClickLogin,
+      isSignIn,
+    };
+  },
 }
 </script>
 
