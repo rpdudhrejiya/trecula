@@ -35,9 +35,9 @@
 				</div>
 				<div>
 					<it-button @click="handleClickSignIn">Sign in with Google</it-button>
-					<!-- <button @click="handleClickGetAuthCode" :disabled="!Vue3GoogleOauth.isInit">get authCode</button>
-					<button @click="handleClickSignOut" :disabled="!Vue3GoogleOauth.isAuthorized">sign out</button>
-					<button @click="handleClickDisconnect" :disabled="!Vue3GoogleOauth.isAuthorized">disconnect</button> -->
+				</div>
+				<div>
+					<v-facebook-login app-id="342891820869528"></v-facebook-login>
 				</div>
 				<div class="action">
 					<it-button @click="submit" block>Log in</it-button>
@@ -51,6 +51,8 @@
 </template>
 
 <script>
+import VFacebookLogin from 'vue-facebook-login-component-next';
+import 'vue-facebook-login-component-next/dist/style.css'
 import SimpleVueValidation from 'simple-vue-validator';
 const Validator = SimpleVueValidation.Validator;
 import { mapActions } from 'vuex'
@@ -58,27 +60,60 @@ import { inject, toRefs } from "vue";
 export default {
 	name:'Login',
 	props: {
-    msg: String,
+		msg: String,
   },
 	data() {	
 		return {
 			email : '',
       password : '',
 			isAuthorized: true,
+			FB:{},
 		}
 	},
+	components: {
+		VFacebookLogin
+	},
+	created() {
+    window.fbAsyncInit = function() {
+      window.FB.init({
+        appId            : '342891820869528',
+        autoLogAppEvents : true,
+        xfbml            : true,
+        version          : 'v11.0'
+      });
+      window.FB.getLoginStatus(function(response) {
+				statusChangeCallback(response);
+        //console.log(response);
+      });
+    };
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+		function statusChangeCallback(response) {
+			if(response.status === 'connected') {
+				console.log("Connected");
+			}
+			else {
+				console.log("Not authenticated");
+			}
+		}
+  },
 	validators: {
-    email: function (value) {
-      return Validator.value(value).required().email();
+		email: function (value) {
+			return Validator.value(value).required().email();
     },
     password: function (value) {
-      return Validator.value(value).required().minLength(6);
+			return Validator.value(value).required().minLength(6);
     },
   },
 	methods: {
 		...mapActions(["LogIn","LogOut"]),
 		submit: async function () {
-      const success = await this.$validate();
+			const success = await this.$validate();
       if (success) {
 				const User = {
 					'email': this.email,
@@ -106,16 +141,12 @@ export default {
       }
     },
 		async handleClickSignIn(){
-      try {
-        const googleUser = await this.$gAuth.signIn();
+			try {
+				const googleUser = await this.$gAuth.signIn();
         if (!googleUser) {
-          return null;
+					return null;
         }
         this.email = googleUser.getBasicProfile().getEmail();
-        // console.log("googleUser", googleUser);
-        // console.log("getId", this.user);
-        // console.log("getBasicProfile", googleUser.getBasicProfile());
-        // console.log("getAuthResponse", googleUser.getAuthResponse());
 				const User = {
 					email : this.email,
 					password : ''
@@ -129,47 +160,24 @@ export default {
 					data: JSON.stringify(User)
 				})
 				.then(() => {
-						const Token = googleUser.getAuthResponse().access_token;
+					const Token = googleUser.getAuthResponse().access_token;
 						console.log(Token);
 						this.LogIn({ User, Token});
 				}, (error) => {
 					console.log(error);
 				});
       } catch (error) {
-        //on fail do something
         console.error(error);
         return null;
       }
     },
-    // async handleClickGetAuthCode(){
-    //   try {
-    //     const authCode = await this.$gAuth.getAuthCode();
-    //     console.log("authCode", authCode);
-    //   } catch(error) {
-    //     //on fail do something
-    //     console.error(error);
-    //     return null;
-    //   }
-    // },
-    // async handleClickSignOut() {
-    //   try {
-    //     await this.$gAuth.signOut();
-    //     console.log("isAuthorized", this.Vue3GoogleOauth.isAuthorized);
-    //     this.user = "";
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // },
-    // handleClickDisconnect() {
-    //   window.location.href = `https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=${window.location.href}`;
-    // },
 	},
 	setup(props) {
-    const { isSignIn } = toRefs(props);
+		const { isSignIn } = toRefs(props);
     const Vue3GoogleOauth = inject("Vue3GoogleOauth");
     const handleClickLogin = () => {};
     return {
-      Vue3GoogleOauth,
+			Vue3GoogleOauth,
       handleClickLogin,
       isSignIn,
     };
